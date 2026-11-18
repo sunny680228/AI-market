@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>佳釧老師的 AI 課堂引導與互動教材大市集</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                        },
+                        brand: {
+                            rose: '#b5838d',
+                            slate: '#6d6875',
+                            accent: '#e5989b',
+                            blue: '#6c8caf',
+                        }
+                    },
+                    boxShadow: {
+                        'premium': '0 10px 30px -5px rgba(109, 104, 117, 0.08), 0 4px 6px -2px rgba(109, 104, 117, 0.03)',
+                        'hover': '0 20px 40px -5px rgba(109, 104, 117, 0.12), 0 8px 12px -2px rgba(109, 104, 117, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+        /* Custom smooth scrollbar for prompt boxes */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Hide scrollbar for tab container but allow scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-[#faf9f6] text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <!-- Decorative background elements -->
+    <div class="absolute top-0 left-0 w-full h-96 bg-gradient-to-br from-[#b5838d]/10 via-[#6d6875]/5 to-transparent -z-10"></div>
+    
+    <!-- Top Nav / Branding Bar -->
+    <nav class="border-b border-slate-100 bg-white/80 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-rose to-brand-slate flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                </div>
+                <span class="font-bold text-lg tracking-wider text-slate-800">佳釧老師的 AI 市集</span>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button onclick="openAddModal()" class="inline-flex items-center space-x-2 bg-gradient-to-r from-brand-rose to-brand-slate text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium shadow-md hover:opacity-95 transition-all duration-200">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>新增私房咒語</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header Section -->
+    <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8 text-center">
+        <span class="bg-indigo-50 text-indigo-600 text-xs font-semibold px-3 py-1.5 rounded-full border border-indigo-100 tracking-wider uppercase mb-4 inline-block">
+            ✨ 全方位課堂生成式 AI 引導大本營
+        </span>
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-brand-rose via-[#a57480] to-brand-slate mt-2">
+            佳釧老師的 AI 課堂與引導大市集
+        </h1>
+        <p class="mt-4 text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">
+            在這裡，點擊 <span class="font-medium text-slate-700">「開啟線上AI小幫手」</span> 即可輕鬆將完美的 AI 提示咒語帶往 ChatGPT/Gemini 生成；
+            或點擊連結開啟精心設計的互動網頁！
+        </p>
+
+        <!-- Stats Counter Dashboard -->
+        <div class="flex flex-wrap justify-center gap-3 mt-6">
+            <span class="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-100 shadow-sm">
+                <i class="fa-solid fa-database text-brand-rose mr-1.5"></i>
+                總計資源: <span id="totalCount" class="font-bold ml-1 text-slate-800">0</span>
+            </span>
+            <span class="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-100 shadow-sm">
+                <i class="fa-solid fa-heart text-rose-500 mr-1.5"></i>
+                我的最愛: <span id="favCount" class="font-bold ml-1 text-slate-800">0</span>
+            </span>
+            <span class="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-slate-600 border border-slate-100 shadow-sm">
+                <i class="fa-solid fa-user-pen text-indigo-500 mr-1.5"></i>
+                自訂收藏: <span id="customCount" class="font-bold ml-1 text-slate-800">0</span>
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow w-full">
+        
+        <!-- Controls & Filters Section -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-premium p-6 mb-8 transition-all duration-300">
+            <div class="flex flex-col md:flex-row md:items-center gap-4">
+                
+                <!-- Expanded Search Input with Icon -->
+                <div class="relative flex-grow">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" id="searchInput" 
+                        class="w-full pl-11 pr-12 py-3.5 bg-slate-50/50 hover:bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all duration-300"
+                        placeholder="輸入關鍵字搜尋，例如：除法、成語、賓果、能量籤、稿紙生成、教學設計、摘要、表格、情緒打卡...">
+                    <!-- Clear Button -->
+                    <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Secondary Filter: Content Type -->
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider hidden lg:inline">類型：</span>
+                    <select id="typeFilter" onchange="applyFilters()" class="bg-slate-50/50 hover:bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all duration-200">
+                        <option value="all">🔍 所有類型</option>
+                        <option value="tool">🛠️ 互動網頁工具 / 機器人</option>
+                        <option value="prompt">🪄 AI 提示詞</option>
+                        <option value="favorites">❤️ 已收藏最愛</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Categories Tabs Section -->
+            <div class="mt-6 border-t border-slate-100 pt-5">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">資源分類導航</span>
+                    <button onclick="resetAllFilters()" class="text-xs text-indigo-600 hover:underline">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> 重設所有篩選
+                    </button>
+                </div>
+                <!-- Mobile Swipeable Container -->
+                <div class="overflow-x-auto no-scrollbar -mx-6 px-6 lg:mx-0 lg:px-0">
+                    <div class="flex flex-nowrap lg:flex-wrap gap-2 pb-2 lg:pb-0" id="tabsContainer">
+                        <button onclick="filterCategory('all')" id="tab-all" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium bg-gradient-to-r from-brand-rose to-brand-slate text-white shadow-md transition-all duration-200">
+                            全部資源
+                        </button>
+                        <button onclick="filterCategory('class-manage')" id="tab-class-manage" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all duration-200">
+                            班級經營小工具
+                        </button>
+                        <button onclick="filterCategory('ai-prep')" id="tab-ai-prep" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all duration-200">
+                            AI 提示詞（班經篇）
+                        </button>
+                        <button onclick="filterCategory('chinese')" id="tab-chinese" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all duration-200">
+                            語文教學與互動教材
+                        </button>
+                        <button onclick="filterCategory('chinese-prompt')" id="tab-chinese-prompt" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all duration-200">
+                            AI 提示詞（語文篇）
+                        </button>
+                        <button onclick="filterCategory('math')" id="tab-math" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all duration-200">
+                            數學教學與互動教材
+                        </button>
+                        <button onclick="filterCategory('diverse-ai')" id="tab-diverse-ai" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all duration-200">
+                            多元 AI 資源
+                        </button>
+                        <button onclick="filterCategory('custom')" id="tab-custom" class="tab-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all duration-200">
+                            ⭐ 老師私房自訂
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Cards Grid -->
+        <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards populated dynamically via JavaScript -->
+        </div>
+
+        <!-- Empty Results View -->
+        <div id="emptyView" class="hidden text-center py-16 bg-white rounded-2xl border border-slate-100 shadow-premium">
+            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-magnifying-glass text-slate-400 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800">找不到相符的資源</h3>
+            <p class="text-slate-400 text-sm mt-1 max-w-sm mx-auto">試著調整搜尋字詞或選取其他分類頁籤，亦可以點選右上角新增自訂的私房咒語。</p>
+            <button onclick="resetAllFilters()" class="mt-4 px-4 py-2 bg-indigo-100 text-indigo-700 font-medium rounded-xl text-sm hover:bg-indigo-200 transition-all">
+                重設搜尋與分類
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 mt-20 py-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm">佳釧老師的 AI 課堂引導與互動教材大市集 &copy; 2026</p>
+        </div>
+    </footer>
+
+    <!-- Add Custom Prompt Modal (Saves to LocalStorage) -->
+    <div id="addPromptModal" class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh] scale-95 transition-transform duration-300" id="addPromptPanel">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-square-plus text-brand-rose"></i>
+                    新增老師私房 AI 咒語
+                </h2>
+                <button onclick="closeAddModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="saveCustomPrompt(event)" class="p-5 space-y-4 overflow-y-auto">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">主題標題 *</label>
+                    <input type="text" id="addTitle" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:bg-white" placeholder="例如：國小寫作魔法：五感描寫引導">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">歸類範疇 *</label>
+                        <select id="addCategory" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+                            <option value="class-manage">班級經營小工具</option>
+                            <option value="ai-prep">AI 提示詞（班經篇）</option>
+                            <option value="chinese">語文教學與互動教材</option>
+                            <option value="chinese-prompt">AI 提示詞（語文篇）</option>
+                            <option value="math">數學教學與互動教材</option>
+                            <option value="diverse-ai">多元 AI 資源</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">資源類型 *</label>
+                        <select id="addType" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+                            <option value="prompt">🪄 AI 提示詞</option>
+                            <option value="tool">🛠️ 互動網頁 / 工具 / 機器人</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">內容描述 / 完整提示詞 *</label>
+                    <textarea id="addDesc" required rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:bg-white resize-none custom-scrollbar" placeholder="請貼上完整的 AI 提示咒語或工具內容說明..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">參考範例連結 (選填)</label>
+                    <input type="url" id="addLink" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:bg-white" placeholder="https://example.com/share/...">
+                </div>
+                <div class="pt-2 border-t border-slate-100 flex gap-3">
+                    <button type="button" onclick="closeAddModal()" class="flex-1 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-xl text-sm transition-all duration-200">
+                        取消
+                    </button>
+                    <button type="submit" class="flex-1 py-2.5 bg-gradient-to-r from-indigo-500 to-violet-600 text-white font-semibold rounded-xl text-sm hover:opacity-95 shadow-md transition-all duration-200">
+                        儲存至瀏覽器
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Fallback Manual Copy Modal -->
+    <div id="fallbackCopyModal" class="fixed inset-0 bg-slate-950/45 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl flex flex-col p-6 scale-95 transition-transform duration-300" id="fallbackCopyPanel">
+            <div class="flex items-center gap-2.5 text-amber-500 mb-3">
+                <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+                <h3 class="text-lg font-bold text-slate-800">安全限制防線</h3>
+            </div>
+            <p class="text-xs text-slate-500 mb-4 leading-relaxed">
+                您的瀏覽器目前開啟了高安全性限制或沙盒保護，阻擋了自動複製。我們已為您將文字**全選**，請直接使用系統複製組合鍵，或在下方長按直接複製：
+            </p>
+            <textarea id="fallbackCopyArea" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-700 h-44 focus:outline-none focus:ring-2 focus:ring-amber-500/20 font-sans resize-none mb-4 custom-scrollbar select-all"></textarea>
+            <div class="flex gap-2.5">
+                <button onclick="copyFallbackAreaText()" class="flex-grow py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl text-sm transition-all shadow-sm">
+                    再次嘗試複製
+                </button>
+                <button onclick="closeFallbackCopyModal()" class="px-5 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-xl text-sm transition-all">
+                    關閉
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Toast Notifications Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none">
+        <!-- Dynamic Toast Items Go Here -->
+    </div>
+
+    <script>
+        // Core Database structured exactly with all latest updates!
+        const defaultItems = [
+            // ==================== 班級經營小工具 ====================
+            {
+                id: 'm_bingo',
+                category: 'class-manage',
+                type: 'tool',
+                title: '🎉 教師節賓果挑戰',
+                desc: '如果想做一個教師節的大冒險挑戰，讓學生一人抽一個任務，要做成賓果卡可以玩(可以選3x3.4x4.5x5，也可以選擇輸出成圖片來玩紙本的)，請備有80個題目任務(可以多元，要國小階段可以完成，有畫畫、體能、創意等，例:排出三種愛心，寫520的藏頭詩，目的是能夠認識老師(也許是除了課業之外)、感謝老師、製作師生回憶。可愛風，字要26號字，標題要活潑海報體，可觸控，陳佳釧老師設計。',
+                link: 'https://share.gemini.google/uvHTcC6wNeq7'
+            },
+            {
+                id: 'm0',
+                category: 'class-manage',
+                type: 'tool',
+                title: '🧙‍♂️ 班級經營魔法板',
+                desc: '打造一個班級經營工具版，裡面有一塊白板區可以打字公告（字的大小顏色粗細可選擇)，右側工具列：有倒數計時器可以計時，有號碼抽籤小工具(點開可以設定號碼，一次選幾個人)，班級秩序管理圖示區(可點選換圖示，要有閱讀、吃飯、午休睡覺、保持安靜、打掃、學習等圖示)，可愛風格，適合小學生。',
+                link: 'https://gemini.google.com/share/0941958c6686'
+            },
+            {
+                id: 'm1',
+                category: 'class-manage',
+                type: 'tool',
+                title: '🎄 聖誕倒數月曆',
+                desc: '做一個聖誕節倒數月曆，每一天上面都有一個禮物可以點開，點開了以後都有和聖誕節不同的內容，可能是一首聖誕歌曲連結、暖心的鼓勵。每一天打開禮物後，聖誕樹上就會加一顆裝飾品。支援觸控、響應式，可愛柔和金色風。',
+                link: 'https://gemini.google.com/share/da4c0c0827b9'
+            },
+            {
+                id: 'm2',
+                category: 'class-manage',
+                type: 'tool',
+                title: '🚦 TO-DO-LIST (待辦事項紅綠燈)',
+                desc: '建立一個互動式的「To-Do List」頁面，紅色區：最緊急、黃色區：進行中、綠色區：準備區。每一區塊都可以點按「新增項目」來增加代辦事項，下方可以備註（一樣可以打字）。可以支援拖曳，把黃色區拖曳到綠色區，或黃色區拖曳到紅色區等。具備存檔與重置功能。',
+                link: 'https://gemini.google.com/share/1ed1d4e564a5'
+            },
+            {
+                id: 'm3',
+                category: 'class-manage',
+                type: 'tool',
+                title: '🎨 情緒打卡牆',
+                desc: '設計一個「情緒打卡牆」海報，適用於教室牆面或電子互動板。背景溫暖、明亮、歡樂，風格可愛童趣。打卡牆需包含：1到30號的學生編號按鈕區、五種情緒選項（開心、生氣、難過、緊張、平靜），每種情緒搭配一個可愛的臉部表情貼圖（例如笑臉、哭臉、皺眉、驚訝、放鬆）。設計需清楚分區，方便學生依序操作：先點選自己號碼，再選擇表情，最後記錄於牆上。整體風格適合國小學生，色彩柔和但有辨識度。',
+                link: 'https://story0228.my.canva.site/helper4'
+            },
+            {
+                id: 'm4',
+                category: 'class-manage',
+                type: 'tool',
+                title: '🌈 彩虹能量籤',
+                desc: '一、彩虹能量卡設計概念\n\n風格：\n淡彩虹水彩背景、溫柔的漸層光感、文字以白色或深灰呈現，字體柔軟、帶手寫感但清晰。\n整體氛圍：平靜、溫暖、療癒，像雨後陽光灑在雲邊的亮度。\n\n卡片元素：\n上方：今日能量詞（如：穩定、勇氣、理解、耐心）\n中央：阿德勒風格的短句\n下方：小提醒（選用）：「願今天的你，比昨天再靠近幸福一步。」\n\n使用方式：\n每天抽一張 → 作為今日心錨\n收藏喜歡的卡片 → 貼在「能量牆」成為教師小成就\n也可用於教師社群／晨間會議暖場\n\n🌟 二、預設固定收錄的三句（你指定的）\n✔ 「遇到再怎麼難過的事，也要說對的話。」\n✔ 「沒有壞的孩子，只有氣餒的孩子。」\n✔ 「用我的穩定面對孩子的不穩定。」\n\n✨ 三、阿德勒風格的鼓勵小語（可隨機抽卡使用）\n【一、心態安定款（20句）】\n1. 隨時擦亮自己的心，不讓忙碌遮住光。\n2. 用心態去戰勝心情，用穩定去陪伴世界。\n3. 保持一顆不被情緒、雜務干擾的心，是教師的溫柔底氣。\n4. 從接納的溫柔中，長出前進的勇氣。\n5. 今天的風再大，我也能選擇穩穩站好。\n6. 我不必完美，只要願意再向前一步。\n7. 安靜一下，力量就會回來。\n8. 我選擇用平靜迎接挑戰，而不是用焦慮迎接今天。\n9. 心慢下來，世界就不那麼急了。\n10. 我能決定今天的節奏。\n11. 我可以為自己按下暫停，再重新呼吸。\n12. 我的情緒不需要被壓抑，永久保留看見。\n13. 我真正需要的，只是一點點內心的空白。\n14. 我給自己一個微笑，事情就會變得不一樣。\n15. 心安定，孩子才安定。\n16. 坐穩自己的椅子，再陪孩子走路。\n17. 我願意用理解化開心裡的結。\n18. 讓自己更柔軟，而不是更堅硬。\n19. 溫柔是一種選擇，也是一種力量。\n20. 平靜是一種能力，而我正在練習它。\n\n【二、陪伴孩子款（20句）】\n1. 孩子的混亂不是故意，是他在尋找方法。\n2. 我願意在孩子的低谷裡，成為那盞不滅的小燈。\n3. 孩子的每一句抱怨，都藏著一個需要。\n4. 他不是不懂事，他只是不會表達。\n5. 今天的叛逆，是明天的探索力。\n6. 我站在孩子的立場想一想，就看見更多了。\n7. 我願意為孩子提供情緒的緩衝區，而不是放大器。\n8. 孩子的委屈值得被聽見，而不是被否定。\n9. 鼓勵是一種陪伴，不是讚美的替代品。\n10. 孩子跌倒的瞬間，教師先蹲下，而不是先糾正。\n11. 他的哭鬧，是在說「我很需要你」。\n12. 孩子的眼淚不是麻煩，是理解的入口。\n13. 孩子不是難帶，他只是需要更多的安全感。\n14. 我願意為孩子示範：失敗不等於結束。\n15. 我說的每句話，都能成為孩子的力量來源。\n16. 孩子的慢，是在用自己的節奏成長。\n17. 需要被理解的，可能不是行為，而是背後的心。\n18. 幫孩子找到方法，比責備來得有效。\n19. 每個孩子都值得再一次機會。\n20. 我先穩，孩子才會慢慢穩。\n\n【三、教師自我鼓勵款（20句）】\n1. 我正在成為更好的自己，不需要急。\n2. 今天的我，已經比昨天更靠近理想一點。\n3. 我的努力不會白費，只是需要時間。\n4. 我可以選擇善待自己，而不是苛責自己。\n5. 我值得被理解，也值得休息。\n6. 我是一位正在進步的老師，不是完美的老師。\n7. 保持學習，就是最美的示範。\n8. 每一次堅持，都是一種力量。\n9. 我能做到的，比我以為的更多。\n10. 我不是一個人，我有同行者。\n11. 小小的前進，也是一種勝利。\n12. 好好照顧自己，是對孩子更深的愛。\n13. 我所付出的一切，都在孩子心裡留下痕跡。\n14. 我值得為自己喝采。\n15. 我願意在忙碌裡找回自己。\n16. 我正在慢慢變成我想遇見的那種老師。\n17. 我不需要「撐住」，我可以「照顧」自己。\n18. 我擁有的比我以為的多。\n19. 我願意給自己更多溫柔。\n20. 今天的我值得被肯定。\n\n【四、教育信念款（20句）】\n1. 教育是一場看不見終點的旅程，但每一步都有意義。\n2. 孩子的成長，不需要急著開花。\n3. 我相信孩子，也相信自己的引導。\n4. 每堂課都是重新開始的機會。\n5. 我不裝備知識，我在陪孩子成為自己。\n6. 影響孩子的不是教材，而是我的語氣。\n7. 鼓勵永遠比比較來得有效。\n8. 問對問題，比給對答案更重要。\n9. 我希望孩子學會的，是力量，而不是順從。\n10. 安全感是所有學習的起點。\n11. 教室是孩子成長的練習場，不是評分場。\n12. 孩子的差異，是教育的禮物。\n13. 每一次回頭看孩子，都讓他更靠近我。\n14. 教育不是控制，而是陪伴。\n15. 孩子如何看自己，比成績更重要。\n16. 我願意用鼓勵點亮孩子的可能。\n17. 影響往往悄悄發生，不用急著看見結果。\n18. 我選擇相信每個孩子都願意做好。\n19. 我把焦點放在孩子的力量，而非孩子的不足。\n20. 用溫柔灌溉，孩子就會生長。\n\n【五、溫柔療癒款（20句）】\n1. 我值得被安放，而不是被推動。\n2. 靜下來，就聽得見自己的需要。\n3. 心裡亮一點，世界也亮一點。\n4. 今天的陽光很好，也願我的心被照亮。\n5. 一點點暖意，就能走很遠。\n6. 我把心裡的灰塵拍一拍，重新開始。\n7. 難過並不代表我不夠堅強。\n8. 我給自己的每一個擁抱，都算數。\n9. 我願意把心放軟，而不是放棄。\n10. 我正在學習以更輕柔的方式生活。\n11. 我的努力值得被自己看見。\n12. 心被照顧了，力量自然生長。\n13. 雨過後的彩虹，是給具有耐心的人。\n14. 每一天都能重新開始一次。\n15. 人生不必快，但要穩穩地走。\n16. 我讓自己慢下來，世界也變得溫柔。\n17. 心裡有希望，就不會迷路。\n18. 我願意為自己點一盞燈。\n19. 世界可能很吵，但我可以很安靜。\n20. 我值得在自己的生命裡溫柔地被對待。',
+                link: 'https://story0228.my.canva.site/rainbow'
+            },
+            {
+                id: 'm8',
+                category: 'class-manage',
+                type: 'tool',
+                title: '⏰ 作業檢核表 + 計時器',
+                desc: '作業檢核表 + 計時器，可以先輸入功課名稱，會有1-30號座號，點擊座號可標記，並附帶計時器',
+                link: 'https://gemini.google.com/share/21a7c38298fd'
+            },
+            {
+                id: 'm9',
+                category: 'class-manage',
+                type: 'tool',
+                title: '📅 2026 遲到登記與學生出勤記錄表',
+                desc: '做一個學生出勤記錄表，可以先選學生人數會產生號碼，再按月份（以上學日期為主，自動扣除週六週日），可儲存並提供遲到、請假標示符號，能下載每個月的記錄表（圖片或PDF）。',
+                link: 'https://gemini.google.com/share/ba8c39ca8904'
+            },
+            {
+                id: 'm10',
+                category: 'class-manage',
+                type: 'tool',
+                title: '📣 課堂跑馬燈小工具',
+                desc: '用以在螢幕或白板上方滾動顯示重要通知、今日課堂重點、或者是優秀表現學生的表揚標語（設計參考自陳名峰老師）。',
+                link: 'https://gemini.google.com/share/b33b1f5683b6'
+            },
+            {
+                id: 'm11',
+                category: 'class-manage',
+                type: 'tool',
+                title: '⏳ 時間管理四象限 + 蕃茄鐘',
+                desc: '請幫我設計一個互動式網站的視覺原型，主題是「時間管理」，採用時間管理四象限（重要/不重要 × 緊急/不緊急）為主架構。畫面需清爽簡潔，包含以下功能提示：\n- 每個象限可新增任務卡片\n- 卡片可拖曳至其他象限\n- 可刪除卡片\n- 可儲存目前狀態\n- 網頁標題為「時間管理」\n\n請使用現代風格、柔和配色，並設計適合桌機與手機版的介面,可觸控。',
+                link: 'https://story0228.my.canva.site/helper3'
+            },
+
+            // ==================== AI 提示詞（班經篇） ====================
+            {
+                id: 'p1',
+                category: 'ai-prep',
+                type: 'prompt',
+                title: '📢 提醒學生家長開學通知',
+                desc: '你是一位國民小學的班級導師，請設計一份開學通知單，提醒學生要調整作息、注意開學時間、要帶寒假作業與學用品，請以條列式方式呈現，不超過五點。',
+                link: 'https://reurl.cc/RWez7z'
+            },
+            {
+                id: 'p2',
+                category: 'ai-prep',
+                type: 'prompt',
+                title: '📋 家長日 PPT 大綱生成',
+                desc: '你是一位國民小學的班級導師，請設計一份家長日簡報大綱，內容包含班級經營理念、親師配合事項與各科教學重點。',
+                link: 'https://reurl.cc/v0v701'
+            },
+            {
+                id: 'p3',
+                category: 'ai-prep',
+                type: 'prompt',
+                title: '🎲 開學破冰活動設計',
+                desc: '走進校園，請老師與學生破冰！設計十種有趣的破冰活動，促進師生與同儕間互動、減少陌生感，器材簡單適合在教室內進行。',
+                link: 'https://reurl.cc/VNMLbA'
+            },
+            {
+                id: 'p4',
+                category: 'ai-prep',
+                type: 'prompt',
+                title: '📰 讀報教育教學靈感',
+                desc: '你是一位國民小學推動讀報的老師，請設計十種有趣好玩的課堂活動，可以讓學生在遊戲中培養讀報習慣並增進閱讀理解。',
+                link: 'https://reurl.cc/G4pp3W'
+            },
+            {
+                id: 'p5',
+                category: 'ai-prep',
+                type: 'prompt',
+                title: '📚 字詞字源教學資源列表',
+                desc: '現在你是一位國小老師，請提供幾個可以幫助學生學習生字筆順、意思、字源的優質線上資源與互動工具列表。',
+                link: 'https://reurl.cc/3744GM'
+            },
+            {
+                id: 'p6',
+                category: 'ai-prep',
+                type: 'prompt',
+                title: '🦁 動物園校外教學通知單',
+                desc: '你是一位國民小學的班級導師，請設計一份校外教學通知單，地點為動物園，請以小學生看得懂的委婉說法，簡要說明活動目的與注意事項。',
+                link: 'https://reurl.cc/QeEXvp'
+            },
+            {
+                id: 'p7',
+                category: 'ai-prep',
+                type: 'prompt',
+                title: '💬 親師通訊 (打架事件委婉親師溝通)',
+                desc: '撰寫一封通知家長的訊息，他的小孩在學校與同學打架滋事，希望能邀請媽媽電話聊聊或到學校對談，大約200字，寫作風格要委婉且溫柔，能體諒母親辛苦，讓家長覺得老師和他在同一陣線、一起解決困難。',
+                link: 'https://reurl.cc/mryybj'
+            },
+            {
+                id: 'p8',
+                category: 'ai-prep',
+                type: 'prompt',
+                title: '🧠 布魯姆認知層次提問設計',
+                desc: '現在你是一位國小老師與閱讀專家，請幫我針對提供的課文內容，依據「布魯姆認知思考層次」（記憶、理解、應用、分析、評估、創造）分別設計各一題能引導學生思考的問題，並為每道問題附上參考答案引導方向。',
+                link: 'https://reurl.cc/80XXRb'
+            },
+            {
+                id: 'p9',
+                category: 'ai-prep',
+                type: 'prompt',
+                title: '⭐ 十種學生特質正向評語庫',
+                desc: '你是一位國小老師，以表格的方式列出十種不同學生特質的期末評語。第一欄為學生特質（如：內向、好動、領導力強），第二欄為正向優點評語，第三欄給予一些未來的具體發展建議。',
+                link: 'https://reurl.cc/80XXRb'
+            },
+            {
+                id: 'p10',
+                category: 'ai-prep',
+                type: 'prompt',
+                title: '📝 十種自主學習暑假作業設計',
+                desc: '你是一位國民小學的班級導師，要出暑假作業給學生，請擺脫傳統抄寫，設計十種符合核心素養、自主學習的作業參考方向與任務內容。',
+                link: 'https://reurl.cc/WRNGne'
+            },
+
+            // ==================== 語文教學與互動教材 ====================
+            {
+                id: 'c1',
+                category: 'chinese',
+                type: 'tool',
+                title: '📖 與 AI 共備課例全公開~遇見美如奶奶',
+                desc: '完整的 ChatGPT 共備對話示例公開，展示如何運用閱讀理解層次、文本亮點提取以及教案結構，進行深度的語文課文教學分析。',
+                link: 'https://chatgpt.com/share/67394d59-7060-800b-9abb-b018897f0cfa'
+            },
+            {
+                id: 'c3',
+                category: 'chinese',
+                type: 'tool',
+                title: '🧩 字謎遊戲：心的悄悄話',
+                desc: '字謎遊戲：康軒三上第一課《心的悄悄話》。結合課文生字的趣味解謎互動網頁，適合中年級學生在語文課堂首節進行識字引導與破冰。',
+                link: 'https://story0228.my.canva.site/3-01-1'
+            },
+            {
+                id: 'c4',
+                category: 'chinese',
+                type: 'tool',
+                title: '🔠 字的拼拼樂',
+                desc: '互動式的部件組合與部件拆解小遊戲（字的拼拼樂），訓練國小中年級學生的造字邏輯、空間架構與結構認讀。',
+                link: 'https://story0228.my.canva.site/game16-1'
+            },
+            {
+                id: 'c5',
+                category: 'chinese',
+                type: 'tool',
+                title: '🗼 字詞摩天樓',
+                desc: '字詞摩天樓。引導學生從擴詞、詞組疊加延伸至短句修飾美化的數位引導分享，有效加強語文寫作的基礎底子。',
+                link: 'https://gemini.google.com/share/b0a073ae558b'
+            },
+            {
+                id: 'c6',
+                category: 'chinese',
+                type: 'tool',
+                title: '⛓️ 九大句型',
+                desc: '打造一個網頁，介紹國小常用的關聯詞(包含九大句型)，先教學，並提供例句，再測驗，答錯有提示，要能夠在平板上操作(要支援觸控)。',
+                link: 'https://gemini.google.com/share/478e4afae290'
+            },
+            {
+                id: 'c7',
+                category: 'chinese',
+                type: 'tool',
+                title: '🦊 對話練習：狐狸的故事',
+                desc: '聚焦課文情境《狐狸的故事》，設計對話與角色語氣練習的互動網頁教材，加強學生的標點符號與口語表達。',
+                link: 'https://story0228.my.canva.site/3-10'
+            },
+            {
+                id: 'c8',
+                category: 'chinese',
+                type: 'tool',
+                title: '🌾 馬太鞍的巴拉告',
+                desc: '打造國小三年級互動網頁，學習課文「馬太鞍的巴拉告」，內容包含生字配對(生字與注音)、生字字謎(提示生字部件，猜出生字)、課文連連看(課文大意)、課文重點(選擇題)，要支援觸控，適合在平板上操作。',
+                link: 'https://gemini.google.com/share/8b6432e7cee2'
+            },
+            {
+                id: 'c9',
+                category: 'chinese',
+                type: 'tool',
+                title: '📝 稿紙生成器',
+                desc: '做一個稿紙生成器，可以選格子大小，單面或雙面，有題目輸入處，最後面要有老師評語的部分，可以有大綱的選項，可以自由設定每一段有幾行，大綱可以出現在每段的最上方，可以有好詞佳句區，評分表的選項，方便讓老師輸入評分標準，每個都有良好、不錯、加油的等級可以勾選。',
+                link: 'https://gemini.google.com/share/c118896ca5c4'
+            },
+            {
+                id: 'c10',
+                category: 'chinese',
+                type: 'tool',
+                title: '🗺️ 迷宮產生器',
+                desc: '請幫我生成一個教育迷宮圖，設計給國小學生。迷宮要求如下：\n\n1. 迷宮難度：請提供三個版本選項，分別對應低年級、中年級、高年級。\n2. 文字輸入：迷宮路徑的文字可以是中文、注音或英文，使用者可以自訂文字內容。\n3. 成語學習：迷宮的正確路線上排列使用者指定的語詞，旁邊可以附上簡短語詞解釋。\n4. 混淆路徑：迷宮其他路徑上加入無關文字（中文、注音或英文），以增加挑戰性。\n5. 顏色與風格：迷宮線條清楚易辨識，風格活潑、吸引小學生，字體大小適合閱讀。\n6. 輸出要求：\n- 生成題目迷宮圖：迷宮中不標示正確路徑。\n- 生成答案迷宮圖：迷宮中清楚標示正確路徑，路徑上的文字按答案順序排列。\n7. 迷宮格子大小適中，讓文字完整呈現，整體構圖整齊。\n8. 生成 PNG 圖檔，方便下載與列印使用。\n\n要能支援觸控，響應式css。',
+                link: 'https://gemini.google.com/share/a7c0bb4a5959'
+            },
+            {
+                id: 'c11',
+                category: 'chinese',
+                type: 'tool',
+                title: '🧩 成語填空產生器',
+                desc: '參考crossword puzzle，設計成語謎語格，可以選擇直橫的格子數量，答案數，要有能填入各答案、線索的地方，可增加刪減數量，\n\n迷宮格子大小適中，讓文字完整呈現，整體構圖整齊。\n\n題目與答案都要能生成 PNG 圖檔，方便下載與列印使用。\n\n要能支援觸控，響應式網頁，適合國小生。',
+                link: 'https://gemini.google.com/share/e88280606123'
+            },
+            {
+                id: 'c12',
+                category: 'chinese',
+                type: 'tool',
+                title: '🗺️ 文本導向的心智圖 (無 AI 評分功能)',
+                desc: '設計一個給小學生使用的互動網頁，要能輸入一篇文章，讓學生圈選每一段的關鍵字，下一步可以讓這些關鍵字字動變成心智圖的樣子，讓學生可以任意移動這些關鍵字，思考要如何擺放，這些關鍵字要成為文字方塊可以輸入再修改。（免登入、具畫布延伸功能的心智圖互動網頁需求）',
+                link: 'https://gemini.google.com/share/9c420134dab3'
+            },
+            {
+                id: 'c13',
+                category: 'chinese',
+                type: 'tool',
+                title: '📝 摘要工具',
+                desc: '製作一個國小中年級的教摘要的互動式網頁，要能有貼上文章的地方，透過教學步驟：切分句→刪除 → 歸納 → 主題句→ 修潤成大意。有不同的工具，按刪除符號(二條線)，按下去會顯示在文章上，有框線，按下去會把關鍵字做標記，有擦布，擦過去就會回復原來的文章。再有一個按鈕可以把關鍵字留下，再讓學生可以修修潤成大意。(參考自陳名峰老師）',
+                link: 'https://gemini.google.com/share/a1f4955d1143'
+            },
+            {
+                id: 'c14',
+                category: 'chinese',
+                type: 'tool',
+                title: '👾 中文怪物闖關記',
+                desc: '請設計一個互動式網頁，主題是「中文怪物闖關記」冒險地圖，支援多點觸控，適合小學生操作。整體風格要像奇幻冒險遊戲，卡通手繪感，色彩鮮明活潑。\n\n**首頁設計：**\n* 畫面中央是一張冒險地圖（可左右滑動或放大縮小）。\n* 地圖上有六個場景，依順序排列：\n  1. 聲調森林 🌳\n  2. 成語大橋 🌉\n  3. 回音山谷 🏔️\n  4. 同音迷宮 🌀\n  5. 時光之河 ⏳\n  6. 寶藏之門 🏰\n* 每個場景都有小圖示或動畫，代表關卡。\n* 學生點擊場景 → 跳轉到該關卡的闖關頁。\n\n🔑 第一關：聲調森林\n提示詞：\n請設計一個互動式網頁/闖關卡，場景是「神秘森林」，樹木會用奇怪的聲調說話。風格要有奇幻感、綠意盎然。\n劇情說明：怪物讓聲調混亂，學生要找出錯誤的聲調字。\n互動任務：呈現幾句話，學生點擊聲調錯誤的字，點對會發光並回復正常聲音。\n獎勵：獲得「聲音鑰匙」插圖。\n\n🔑 第二關：成語大橋\n提示詞：\n請設計一個互動式網頁/闖關卡，場景是一座半透明的大橋，只有答對成語，橋才會慢慢拼出來。\n劇情說明：過橋必須用智慧。\n互動任務：出現生活情境 → 學生從選項選出正確成語 → 桥板自動拼合。\n獎勵：獲得「智慧鑰匙」插圖。\n\n🔑 第三關：回音山谷\n提示詞：\n請設計一個互動式網頁/闖關卡，場景是回音山谷，四周有山壁，回音效果突出。\n劇情說明：唸錯就會被魔法回音困住。\n互動任務：顯示繞口令，學生要輪流唸三次，頁面可以有「錄音」或「倒數計時」效果。\n獎勵：獲得「勇氣鑰匙」插圖。\n\n🔑 第四關：同音迷宮\n提示詞：\n請設計一個互動式網頁/闖關卡，場景是充滿錯字的迷宮。\n劇情說明：怪物製造了同音字陷阱，走錯就會進入死路。\n互動任務：給出句子，學生要點選錯用的同音字 → 正確會打開出口動畫。\n獎勵：獲得「文字鑰匙」插圖。\n\n🔑 第五關：時光之河\n提示詞：\n請設計一個互動式網頁/闖關卡，場景是一條被打亂的時光之河，流水中漂浮著文字。\n劇情說明：故事順序被打亂。\n互動任務：學生拖曳句子，依正確順序排列，完成後河流恢復流動。\n獎勵：獲得「時間鑰匙」插圖。\n\n🔑 第六關：寶藏之門\n提示詞：\n請設計一個互動式網頁/闖關卡，場景是一座巨大的寶藏大門，周圍閃爍光芒。\n劇情說明：需要大家的力量才能打開寶藏。\n互動任務：每個學生輸入一句「鼓舞人心的話」→ 句子會逐一浮現在門上，力量累積 → 大門打開。\n獎勵：獲得「團結鑰匙」插圖，並觸發最終寶藏動畫。\n\n**互動需求：**\n* 每通過一關，地圖上的場景會亮起，並自動出現一把鑰匙圖示。\n* 地圖邊上顯示「鑰匙收集區」，共六把鑰匙。\n* 最終全部收集後，寶藏之門會閃爍提示可以解鎖。\n\n**結局頁：**\n* 地圖中央寶藏門自動打開 → 金光閃閃的寶箱出現。\n* 畫面冒出貼紙、糖果、書籤、勇士證書等插圖。\n* 大字動畫：「我們打敗中文怪物了！」 🎉\n\n**視覺風格：**\n* 手繪冒險地圖風，像是遊戲副本地圖。\n* 每個場景要有不同特色（森林綠意、大橋河流、山谷岩石、迷宮牆壁、時光之河的藍光、寶藏門的金光）。\n* 整體色彩明亮，帶點奇幻 RPG 冒險感。',
+                link: 'https://story0228.my.canva.site/game101-1'
+            },
+
+            // ==================== AI 提示詞（語文篇） ====================
+            {
+                id: 'cp1',
+                category: 'chinese-prompt',
+                type: 'prompt',
+                title: '🪄 情境一：找文本亮點',
+                desc: '你現在是一個閱讀專家，請幫我寫出文本亮點，以條列式方式說明，至少5點，請使用繁體中文回答。',
+                link: ''
+            },
+            {
+                id: 'cp2',
+                category: 'chinese-prompt',
+                type: 'prompt',
+                title: '🪄 情境二：設計教學提問',
+                desc: '你是國小國語科老師，請給我10個提問，能幫助學生了解這篇文本的敘寫方式與內容，請包含人物描寫方式，盡量用情境題描述，盡量廣泛情境提問，且國小中年級程度學生可理解的語句。',
+                link: ''
+            },
+            {
+                id: 'cp3',
+                category: 'chinese-prompt',
+                type: 'prompt',
+                title: '🪄 情境三：內容深究提問',
+                desc: '你是一個國小老師，請出十題層次不同的選擇題，協助學生理解這篇文本的內容、主旨與寫法，每題要有四個選項，且長度一致，包含pirls四層次，要有能提取重要的關鍵訊息、跨段落的推論、全文歸納的詮釋整合以及比較評估。 請使用繁體中文回答，並提供答案。',
+                link: ''
+            },
+            {
+                id: 'cp4',
+                category: 'chinese-prompt',
+                type: 'prompt',
+                title: '🪄 情境四：內容提問轉換表格 X 搭配 WORDWALL',
+                desc: '將上述文章用閱讀理解的四個層次出10題選擇題,用表格的方式呈現,第一欄位為題目,第二欄位為選擇題的第1個選項,以此類推,第六欄位為選擇題的答案,第七欄位為所用到的素養層次。',
+                link: ''
+            },
+            {
+                id: 'cp5',
+                category: 'chinese-prompt',
+                type: 'prompt',
+                title: '🪄 情境五：設計寫作教學引導',
+                desc: '請參考上面文章結構，設計寫作引導，包含各段寫作提問，和提供各段可以使用的好詞佳句寶庫，讓學生完成一篇ｏｏｏ ，寫一篇"ｏｏｏｏ"。',
+                link: ''
+            },
+            {
+                id: 'cp6',
+                category: 'chinese-prompt',
+                type: 'prompt',
+                title: '🪄 情境六：寫作評語',
+                desc: '請針對這篇創作"oooo"的作文，依照立意取材、組織結構、遣詞造句的四個面向，給予優、中、劣三個寫作評語，並給予總評範例，以表格呈現。',
+                link: ''
+            },
+            {
+                id: 'cp7',
+                category: 'chinese-prompt',
+                type: 'prompt',
+                title: '🪄 情境七：教學設計',
+                desc: '你現在是一個教學設計專家，熟悉台灣108課綱精神，請幫我設計這篇課文的教案，教學對象是小學o年級，教學內容要符合素養導向，有學生的實作任務，課程時間規劃o節課，每節課40分鐘，以表格表示，教案格式如下：設計動機、學生學習歷程、學生學科先備經驗、融入議題的實質內涵、核心素養、學習表現、學習內容、學習目標、評量策略、工具教學資源、教學活動內容及實施方式。',
+                link: ''
+            },
+
+            // ==================== 數學教學與互動教材 ====================
+            {
+                id: 'ma1',
+                category: 'math',
+                type: 'tool',
+                title: '🕒 三年級時間',
+                desc: '打造一個國小三年級互動式網站，認識十二時制與二十四時制(包含認識AM和PM)的互換概念，先教學，再測驗，並要有時間可以讓他撥轉，感受到時間的變化。',
+                link: 'https://gemini.google.com/share/d65da8bc9eb6'
+            },
+            {
+                id: 'ma2',
+                category: 'math',
+                type: 'tool',
+                title: '🍰 三年級分數',
+                desc: '打造國小三年級互動網頁，教分數的加減，先教單位分數的概念，再教同分母的分數比大小，要有可以操作的活動，包含離散量與連續量，讓學生透過拖曳、塗色塊來直觀感受分數的概念並能比大小，要能支援平板操作。',
+                link: 'https://gemini.google.com/share/f65863e0a4b2'
+            },
+            {
+                id: 'ma3',
+                category: 'math',
+                type: 'tool',
+                title: '💎 三年級除法',
+                desc: '「在宇宙中收集七彩寶石！」專專為小學三年級設計的趣味除法互動遊戲。以九九乘法為基礎算理，題目包含有餘數的除法算式，全面支援觸控與平板橫直式RWD響應。',
+                link: 'https://story0228.my.canva.site/math6'
+            },
+            {
+                id: 'ma4',
+                category: 'math',
+                type: 'tool',
+                title: '📐 三年級面積',
+                desc: '打造國小三年級面積單元的互動式網頁，要先教一方公分的概念，再有平方公分的格子點數，接著有平方公分透明板的拖曳，可以量出12平方公分、16平方公分的長方形，然後教切割和拼湊會形狀改變面積不變，再以操作加強觀念，最後有十題測驗，隨機出題，要有回饋，最後加一個創意發想，有各種顏色與大小的正方形、三角形、長方形，可以重覆點了不斷重覆，可以自由換色，讓學生可以拖到一個方格紙上創造圖案，最後算一算面積大小，可觸控操作',
+                link: 'https://gemini.google.com/share/fe7f9725a23b'
+            },
+            {
+                id: 'ma5',
+                category: 'math',
+                type: 'tool',
+                title: '⚖️ 三年級重量',
+                desc: '設計一個小學三年級的數學互動式網頁，主題要教學生看秤面與重量讀數（公斤與公克換算與估測），再透過互動測驗。響應式，要能觸控，可愛簡約風，加上一些相關的圖示。',
+                link: 'https://gemini.google.com/share/663dd60c37e9'
+            },
+            {
+                id: 'ma6',
+                category: 'math',
+                type: 'tool',
+                title: '📊 三年級表格',
+                desc: '設計一個小學三年級的數學互動式網頁，主題是教看表格，先以早餐店價目表教學生看價錢，再教看課表(星期三與星期五半天)，以及高鐵時刻表，票價表，要可以互動，最後給學生紀錄表請他填入表格內的數字。要有10題小測驗。',
+                link: 'https://gemini.google.com/share/a31ff99783e1'
+            },
+
+            // ==================== 多元 AI 資源 ====================
+            {
+                id: 'd1',
+                category: 'diverse-ai',
+                type: 'tool',
+                title: '🤖 佳釧老師備課小幫手',
+                desc: '佳釧老師備課小幫手。專為國小教師設計的專屬備課對話助理，提供教案設計、教材點評與創意點子引導。',
+                link: 'https://52hal.cc/SUNNYiiwcn'
+            },
+            {
+                id: 'd2',
+                category: 'diverse-ai',
+                type: 'tool',
+                title: '🤖 佳釧老師出題小幫手',
+                desc: '佳釧老師出題小幫手。幫助老師快速生成閱讀理解題、成語測驗、生字造句等多種評量卷的客製化出題助理。',
+                link: 'https://52hal.cc/SUNNY8etdg'
+            },
+            {
+                id: 'd3',
+                category: 'diverse-ai',
+                type: 'tool',
+                title: '✨ 國小互動教材提示詞產生器',
+                desc: '專為國小教師打造的課堂互動教材提示詞產生器，一鍵生成多元創意互動教案與學習工具提示詞。',
+                link: 'https://gemini.google.com/share/51f4065b5864?skid=9c271144-8aba-42dd-8d0b-0ee260375ecc'
+            }
+        ];
+
+        // State variables
+        let dataItems = [];
+        let favorites = new Set();
+        let customItems = [];
+        let currentCategory = 'all';
+        let currentFallbackText = '';
+
+        function initApp() {
+            // Load custom items
+            const savedCustom = localStorage.getItem('jiaChuan_custom_prompts');
+            if (savedCustom) {
+                try {
+                    customItems = JSON.parse(savedCustom);
+                } catch(e) {
+                    customItems = [];
+                }
+            }
+
+            // Load favorites
+            const savedFavs = localStorage.getItem('jiaChuan_fav_prompts');
+            if (savedFavs) {
+                try {
+                    favorites = new Set(JSON.parse(savedFavs));
+                } catch(e) {
+                    favorites = new Set();
+                }
+            }
+
+            // Combine arrays
+            dataItems = [...customItems, ...defaultItems];
+
+            // Render UI
+            updateCounters();
+            renderCards();
+        }
+
+        function updateCounters() {
+            document.getElementById('totalCount').innerText = dataItems.length;
+            document.getElementById('favCount').innerText = favorites.size;
+            document.getElementById('customCount').innerText = customItems.length;
+        }
+
+        function renderCards() {
+            const grid = document.getElementById('cardsGrid');
+            const emptyView = document.getElementById('emptyView');
+            const searchInputVal = document.getElementById('searchInput').value.trim().toLowerCase();
+            const typeFilterVal = document.getElementById('typeFilter').value;
+            const clearBtn = document.getElementById('clearSearchBtn');
+
+            // Show/hide clear search button
+            if (searchInputVal.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            grid.innerHTML = '';
+
+            // Filtering logic
+            const filtered = dataItems.filter(item => {
+                // Category matching
+                const matchesCategory = currentCategory === 'all' || item.category === currentCategory;
+                
+                // Type / Favorites matching
+                let matchesType = true;
+                if (typeFilterVal === 'tool') matchesType = item.type === 'tool';
+                else if (typeFilterVal === 'prompt') matchesType = item.type === 'prompt';
+                else if (typeFilterVal === 'favorites') matchesType = favorites.has(item.id);
+
+                // Search query matching
+                const matchesSearch = !searchInputVal || 
+                    item.title.toLowerCase().includes(searchInputVal) || 
+                    item.desc.toLowerCase().includes(searchInputVal);
+
+                return matchesCategory && matchesType && matchesSearch;
+            });
+
+            // Show empty screen if nothing found
+            if (filtered.length === 0) {
+                grid.classList.add('hidden');
+                emptyView.classList.remove('hidden');
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            emptyView.classList.add('hidden');
+
+            // Render loop
+            filtered.forEach(item => {
+                const isFavorite = favorites.has(item.id);
+                const card = document.createElement('div');
+                
+                // Card category badge styling configuration
+                let categoryLabel = "自訂提示詞";
+                let badgeClass = "bg-purple-50 text-purple-600 border-purple-100";
+
+                if (item.category === 'class-manage') {
+                    categoryLabel = "班級經營小工具";
+                    badgeClass = "bg-amber-50 text-amber-600 border-amber-100";
+                } else if (item.category === 'ai-prep') {
+                    categoryLabel = "AI 提示詞（班經篇）";
+                    badgeClass = "bg-rose-50 text-rose-600 border-rose-100";
+                } else if (item.category === 'chinese') {
+                    categoryLabel = "語文教學與互動教材";
+                    badgeClass = "bg-emerald-50 text-emerald-600 border-emerald-100";
+                } else if (item.category === 'chinese-prompt') {
+                    categoryLabel = "AI 提示詞（語文篇）";
+                    badgeClass = "bg-fuchsia-50 text-fuchsia-600 border-fuchsia-100";
+                } else if (item.category === 'math') {
+                    categoryLabel = "數學教學與互動教材";
+                    badgeClass = "bg-blue-50 text-blue-600 border-blue-100";
+                } else if (item.category === 'diverse-ai') {
+                    categoryLabel = "多元 AI 資源";
+                    badgeClass = "bg-cyan-50 text-cyan-600 border-cyan-100";
+                }
+
+                const isCustom = item.id.startsWith('c_usr_');
+                // Decide whether to hide Copy button (for d1, d2 and d3 assistant bots)
+                const isAssistantTool = item.id === 'd1' || item.id === 'd2' || item.id === 'd3';
+
+                // Card construction
+                card.className = "bg-white rounded-2xl shadow-premium border border-slate-100 hover:shadow-hover hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between overflow-hidden relative";
+                
+                // HTML for inside card
+                card.innerHTML = `
+                    <div>
+                        <!-- Border banner -->
+                        <div class="h-1.5 w-full bg-gradient-to-r ${item.type === 'prompt' ? 'from-brand-rose to-brand-accent' : 'from-indigo-500 to-brand-blue'}"></div>
+                        
+                        <div class="p-6">
+                            <!-- Category Badge, Type Indicator, Fav Heart -->
+                            <div class="flex items-center justify-between mb-3.5">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <span class="text-[11px] font-bold px-2.5 py-1 rounded-full border ${badgeClass}">
+                                        ${categoryLabel}
+                                    </span>
+                                    <span class="text-[11px] font-bold px-2 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-500 flex items-center gap-1">
+                                        ${item.type === 'prompt' ? '<i class="fa-solid fa-wand-magic-sparkles"></i> 提示詞' : '<i class="fa-solid fa-laptop-code"></i> 互動網頁'}
+                                    </span>
+                                </div>
+                                <div class="flex items-center space-x-1.5">
+                                    <!-- Delete Button (Only for custom user items) -->
+                                    ${isCustom ? `
+                                        <button onclick="deleteCustomItem('${item.id}')" class="w-7 h-7 rounded-full bg-red-50 hover:bg-red-100 text-red-500 flex items-center justify-center transition-all duration-150" title="刪除此自訂項目">
+                                            <i class="fa-solid fa-trash-can text-xs"></i>
+                                        </button>
+                                    ` : ''}
+                                    <!-- Favorite toggle heart -->
+                                    <button onclick="toggleFavorite('${item.id}')" class="w-7 h-7 rounded-full ${isFavorite ? 'bg-rose-50 text-rose-500' : 'bg-slate-50 text-slate-400 hover:text-rose-500'} flex items-center justify-center transition-all duration-150">
+                                        <i class="${isFavorite ? 'fa-solid' : 'fa-regular'} fa-heart text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="font-bold text-slate-800 text-[16px] leading-snug mb-3 hover:text-indigo-600 transition-colors line-clamp-2">
+                                ${item.title}
+                            </h3>
+
+                            <!-- Desc/Prompt content preview -->
+                            <div class="bg-slate-50/70 hover:bg-slate-50 border border-slate-100 rounded-xl p-3.5 text-xs text-slate-600 line-clamp-5 whitespace-pre-line leading-relaxed h-[110px] overflow-y-auto custom-scrollbar font-sans relative">
+                                ${item.desc}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div class="p-6 pt-0 border-t border-slate-50 bg-slate-50/50 flex items-center gap-2">
+                        ${!isAssistantTool ? `
+                            <button onclick="copyContent(this, '${item.id}')" class="flex-grow inline-flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 px-3 rounded-xl text-xs font-bold shadow-sm transition-all duration-200">
+                                <i class="fa-solid fa-copy"></i>
+                                <span>複製內容</span>
+                            </button>
+                        ` : ''}
+                        
+                        ${item.link ? `
+                            <a href="${item.link}" target="_blank" class="${isAssistantTool ? 'w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm' : 'shrink-0 bg-white border-slate-200 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-100 text-slate-700'} inline-flex items-center justify-center border py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all duration-150" title="${isAssistantTool ? '開啟線上AI小幫手' : '開啟參考網頁或助理'}">
+                                <i class="fa-solid fa-up-right-from-square ${isAssistantTool ? 'mr-1.5' : ''}"></i>
+                                ${isAssistantTool ? '<span>開啟線上AI小幫手</span>' : ''}
+                            </a>
+                        ` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            
+            // Highlight active button
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.className = "tab-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium bg-slate-50 text-slate-600 hover:bg-slate-100 transition-all duration-200";
+            });
+
+            const activeBtn = document.getElementById(`tab-${cat}`);
+            if (activeBtn) {
+                activeBtn.className = "tab-btn shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium bg-gradient-to-r from-brand-rose to-brand-slate text-white shadow-md transition-all duration-200";
+            }
+            renderCards();
+        }
+
+        function applyFilters() {
+            renderCards();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            renderCards();
+        }
+
+        function resetAllFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('typeFilter').value = 'all';
+            filterCategory('all');
+        }
+
+        function toggleFavorite(id) {
+            if (favorites.has(id)) {
+                favorites.delete(id);
+                showToast("❤️ 已從我的最愛中移除");
+            } else {
+                favorites.add(id);
+                showToast("💖 已成功加入我的最愛！", "success");
+            }
+            localStorage.setItem('jiaChuan_fav_prompts', JSON.stringify(Array.from(favorites)));
+            updateCounters();
+            renderCards();
+        }
+
+        function copyContent(btn, id) {
+            const item = dataItems.find(i => i.id === id);
+            if (!item) return;
+
+            performCopy(item.desc, btn, "📋 內容已成功複製！");
+        }
+
+        /**
+         * Robust Copy-to-Clipboard Solution with a definitive fallback UI Modal.
+         * Addresses sandboxed iframe environments where automated writing is fully blocked.
+         */
+        function performCopy(textToCopy, buttonTrigger, successMessage) {
+            currentFallbackText = textToCopy; // Store in global in case fallback is triggered
+            
+            // First Attempt: Modern Clipboard API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(() => {
+                        handleSuccess();
+                    })
+                    .catch((err) => {
+                        console.warn("Navigator Clipboard API blocked, trying fallback:", err);
+                        runFallbackCopy();
+                    });
+            } else {
+                runFallbackCopy();
+            }
+
+            function runFallbackCopy() {
+                // Secondary Attempt: DOM virtual element with executive selection
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                
+                textArea.style.position = 'fixed';
+                textArea.style.top = '10px';
+                textArea.style.left = '10px';
+                textArea.style.width = '1px';
+                textArea.style.height = '1px';
+                textArea.style.padding = '0';
+                textArea.style.border = 'none';
+                textArea.style.outline = 'none';
+                textArea.style.boxShadow = 'none';
+                textArea.style.background = 'transparent';
+                
+                document.body.appendChild(textArea);
+                
+                const activeEl = document.activeElement;
+                
+                textArea.focus();
+                textArea.select();
+                textArea.setSelectionRange(0, 99999); // Mobile specific select
+                
+                let successful = false;
+                try {
+                    successful = document.execCommand('copy');
+                } catch (err) {
+                    console.error("document.execCommand('copy') failed:", err);
+                }
+                
+                document.body.removeChild(textArea);
+                
+                // Return focus to trigger button
+                if (activeEl && typeof activeEl.focus === 'function') {
+                    activeEl.focus();
+                }
+                
+                if (successful) {
+                    handleSuccess();
+                } else {
+                    // Tertiary Attempt: Trigger Manual Select Clipboard Modal
+                    openFallbackCopyModal(textToCopy);
+                }
+            }
+
+            function handleSuccess() {
+                showToast(successMessage, "success");
+                
+                // Button visual feedback
+                if (buttonTrigger) {
+                    const originalHTML = buttonTrigger.innerHTML;
+                    buttonTrigger.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>複製成功！</span>`;
+                    buttonTrigger.classList.add('bg-green-600', 'hover:bg-green-700');
+                    buttonTrigger.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                    
+                    setTimeout(() => {
+                        buttonTrigger.innerHTML = originalHTML;
+                        buttonTrigger.classList.remove('bg-green-600', 'hover:bg-green-700');
+                        buttonTrigger.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                    }, 2000);
+                }
+            }
+        }
+
+        // Dropdown Fallback Modal Handlers
+        function openFallbackCopyModal(text) {
+            const modal = document.getElementById('fallbackCopyModal');
+            const panel = document.getElementById('fallbackCopyPanel');
+            const area = document.getElementById('fallbackCopyArea');
+            
+            area.value = text;
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            modal.classList.add('opacity-100');
+            panel.classList.remove('scale-95');
+            panel.classList.add('scale-100');
+            
+            // Auto-highlight for instant copy
+            setTimeout(() => {
+                area.focus();
+                area.select();
+            }, 150);
+            
+            showToast("⚠️ 複製受阻！請直接按下方手動複製按鈕！", "info");
+        }
+
+        function closeFallbackCopyModal() {
+            const modal = document.getElementById('fallbackCopyModal');
+            const panel = document.getElementById('fallbackCopyPanel');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.classList.remove('opacity-100');
+            panel.classList.remove('scale-100');
+            panel.classList.add('scale-95');
+        }
+
+        function copyFallbackAreaText() {
+            const area = document.getElementById('fallbackCopyArea');
+            area.focus();
+            area.select();
+            area.setSelectionRange(0, 99999);
+            
+            let success = false;
+            try {
+                success = document.execCommand('copy');
+            } catch (e) {}
+            
+            if (success) {
+                showToast("📋 複製成功！", "success");
+                closeFallbackCopyModal();
+            } else {
+                showToast("❌ 複製受阻，請點擊文字長按以進行複製。", "error");
+            }
+        }
+
+        function showToast(message, type = "info") {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            let bgClass = "bg-slate-900 text-white";
+            let icon = '<i class="fa-solid fa-circle-info text-blue-400"></i>';
+
+            if (type === 'success') {
+                bgClass = "bg-emerald-900 text-emerald-100 border-emerald-800";
+                icon = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
+            } else if (type === 'error') {
+                bgClass = "bg-rose-900 text-rose-100 border-rose-800";
+                icon = '<i class="fa-solid fa-triangle-exclamation text-rose-400"></i>';
+            }
+
+            toast.className = `${bgClass} flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold pointer-events-auto transition-all duration-300 transform translate-y-5 opacity-0 max-w-sm`;
+            toast.innerHTML = `
+                ${icon}
+                <span class="flex-grow">${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // Animate In
+            setTimeout(() => {
+                toast.classList.remove('translate-y-5', 'opacity-0');
+            }, 10);
+
+            // Remove automatically
+            setTimeout(() => {
+                toast.classList.add('translate-y-5', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        function openAddModal() {
+            const modal = document.getElementById('addPromptModal');
+            const panel = document.getElementById('addPromptPanel');
+            modal.classList.remove('pointer-events-none', 'opacity-0');
+            modal.classList.add('opacity-100');
+            panel.classList.remove('scale-95');
+            panel.classList.add('scale-100');
+        }
+
+        function closeAddModal() {
+            const modal = document.getElementById('addPromptModal');
+            const panel = document.getElementById('addPromptPanel');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.classList.remove('opacity-100');
+            panel.classList.remove('scale-100');
+            panel.classList.add('scale-95');
+        }
+
+        function saveCustomPrompt(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('addTitle').value.trim();
+            const category = document.getElementById('addCategory').value;
+            const type = document.getElementById('addType').value;
+            const desc = document.getElementById('addDesc').value.trim();
+            const link = document.getElementById('addLink').value.trim();
+
+            const newItem = {
+                id: 'c_usr_' + Date.now(),
+                category,
+                type,
+                title,
+                desc,
+                link: link || ''
+            };
+
+            // Save to internal state
+            customItems.unshift(newItem);
+            dataItems = [...customItems, ...defaultItems];
+
+            // Save to LocalStorage
+            localStorage.setItem('jiaChuan_custom_prompts', JSON.stringify(customItems));
+
+            // Refresh view
+            updateCounters();
+            renderCards();
+            closeAddModal();
+
+            // Clear Form
+            document.getElementById('addTitle').value = '';
+            document.getElementById('addDesc').value = '';
+            document.getElementById('addLink').value = '';
+
+            showToast("🎉 成功新增您自訂的 AI 咒語至市集！", "success");
+        }
+
+        function deleteCustomItem(id) {
+            customItems = customItems.filter(item => item.id !== id);
+            dataItems = [...customItems, ...defaultItems];
+            favorites.delete(id);
+            
+            localStorage.setItem('jiaChuan_custom_prompts', JSON.stringify(customItems));
+            localStorage.setItem('jiaChuan_fav_prompts', JSON.stringify(Array.from(favorites)));
+
+            updateCounters();
+            renderCards();
+            showToast("🗑 已成功刪除自訂咒語。");
+        }
+
+        // Initialize on Window Load
+        window.onload = function() {
+            initApp();
+            
+            // Listen to dynamic typing on the search bar
+            document.getElementById('searchInput').addEventListener('input', renderCards);
+        };
+    </script>
+</body>
+</html>
